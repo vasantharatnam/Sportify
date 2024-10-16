@@ -4,11 +4,12 @@ import { BookingContext } from '../context/BookingContext';
 import { createBooking } from '../services/api';
 import { toast } from 'react-toastify';
 
-const BookingForm = ({ refreshBookings }) => {
+const BookingForm = ({ refreshBookings, erMes }) => {
   const { selectedCenter, selectedSport, courts, selectedDate } = useContext(BookingContext);
   const [courtId, setCourtId] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
   const [customerName, setCustomerName] = useState('');
+  const [formError, setFormError] = useState(''); // Local error state
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -22,7 +23,7 @@ const BookingForm = ({ refreshBookings }) => {
     e.preventDefault();
 
     if (!courtId || !timeSlot || !customerName) {
-      toast.error('All fields are required.');
+      setFormError('All fields are required.');
       return;
     }
 
@@ -33,15 +34,18 @@ const BookingForm = ({ refreshBookings }) => {
         courtId,
         date: selectedDate,
         timeSlot,
-        customerName
+        customerName,
       });
+
       toast.success('Booking created successfully.');
       setCourtId('');
       setTimeSlot('');
       setCustomerName('');
+      setFormError(''); // Clear error message
       refreshBookings();
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error creating booking.');
+      const errorMessage = error.response?.data?.message || 'Error creating booking.';
+      setFormError(errorMessage); // Set error message from backend
     }
   };
 
@@ -96,6 +100,16 @@ const BookingForm = ({ refreshBookings }) => {
       >
         Create Booking
       </button>
+
+      {/* Display form error message */}
+      {formError && (
+        <p className="text-red-500 text-sm mt-2">{formError}</p>
+      )}
+
+      {/* Display additional error message passed via erMes prop */}
+      {erMes && (
+        <p className="text-red-500 text-sm mt-1">{erMes}</p>
+      )}
     </form>
   );
 };

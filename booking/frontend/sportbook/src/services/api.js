@@ -28,7 +28,13 @@ export const fetchBookings = async (centerId, sportId, date) => {
   const response = await axios.get(`${API_BASE_URL}/api/bookings`, {
     params: { centerId, sportId, date }
   });
-  return response.data;
+  if(response.status === 409)
+  {
+    const {status, data} = response;
+    console.log(response,"koko");
+    return ({status:status,message:data.message});
+  }
+  return ({status:response.status,message:response.data});
 };
 
 export const createBooking = async (bookingData) => {

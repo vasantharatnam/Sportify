@@ -7,7 +7,7 @@ const SportSelector = () => {
 
   const handleChange = (e) => {
     setSelectedSport(e.target.value);
-    setCourts([]);
+    setCourts([]); // ✅ Now setCourts is correctly provided via context
   };
 
   return (

@@ -71,7 +71,8 @@ export const BookingProvider = ({ children }) => {
         selectedSport,
         setSelectedSport,
         selectedDate,
-        setSelectedDate
+        setSelectedDate,
+        setCourts, // ✅ **Added setCourts to the context value**
       }}
     >
       {children}

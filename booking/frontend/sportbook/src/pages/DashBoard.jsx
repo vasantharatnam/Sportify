@@ -16,12 +16,18 @@ const Dashboard = () => {
     setSelectedDate
   } = useContext(BookingContext);
   const [bookings, setBookings] = useState([]);
+  const [erMes,setErmes] = useState(""); 
 
   const getBookings = async () => {
     if (selectedCenter && selectedSport && selectedDate) {
       try {
-        const data = await fetchBookings(selectedCenter, selectedSport, selectedDate);
-        setBookings(data);
+        const {status,message} = await fetchBookings(selectedCenter, selectedSport, selectedDate);
+        if(status===409)
+        {
+          setErmes(message);
+          return;
+        }
+        setBookings(message);
       } catch (error) {
         console.error('Error fetching bookings:', error);
       }
@@ -56,7 +62,7 @@ const Dashboard = () => {
       
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-blue-500">Create a New Booking</h2>
-        <BookingForm refreshBookings={refreshBookings} />
+        <BookingForm refreshBookings={refreshBookings} erMes={erMes} />
       </div>
     </div>
   );

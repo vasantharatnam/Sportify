@@ -8,7 +8,7 @@ const CenterSelector = () => {
   const handleChange = (e) => {
     setSelectedCenter(e.target.value);
     setSelectedSport('');
-    setCourts([]);
+    setCourts([]); // ✅ Now setCourts is correctly provided via context
   };
 
   return (
